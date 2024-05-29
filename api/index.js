@@ -1,9 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+import dotenv from "dotenv"; //environment variable
 import userRoutes from "./routes/user.route.js";
-dotenv.config();
+import authRoutes from "./routes/auth.route.js";
 
+dotenv.config(); //initialize dotenv
+
+//database connection
 mongoose
   .connect(process.env.MONGO)
   .then(() => {
@@ -13,10 +16,14 @@ mongoose
     console.log(err);
   });
 
-const app = express();
+const app = express(); //initialize express application
+app.use(express.json());
 
+//start the server on port 3000, making it ready to accept requests
 app.listen(3000, () => {
   console.log("Listening on port 3000!");
 });
 
+//Sets up the routes to handle different endpoints. In this case, it routes all /api/user requests to the handlers defined in userRoutes
 app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
