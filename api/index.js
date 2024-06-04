@@ -27,3 +27,13 @@ app.listen(3000, () => {
 //Sets up the routes to handle different endpoints. In this case, it routes all /api/user requests to the handlers defined in userRoutes
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal server error";
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode,
+  })
+})
